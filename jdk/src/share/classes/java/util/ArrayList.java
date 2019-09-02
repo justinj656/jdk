@@ -106,6 +106,7 @@ import java.util.function.UnaryOperator;
 public class ArrayList<E> extends AbstractList<E>
         implements List<E>, RandomAccess, Cloneable, java.io.Serializable
 {
+    // ##TODO understand java serialization
     private static final long serialVersionUID = 8683452581122892189L;
 
     /**
@@ -168,6 +169,7 @@ public class ArrayList<E> extends AbstractList<E>
         elementData = c.toArray();
         size = elementData.length;
         // c.toArray might (incorrectly) not return Object[] (see 6260652)
+        // ##ref https://bugs.openjdk.java.net/browse/JDK-6260652
         if (elementData.getClass() != Object[].class)
             elementData = Arrays.copyOf(elementData, size, Object[].class);
     }
@@ -212,9 +214,11 @@ public class ArrayList<E> extends AbstractList<E>
         ensureExplicitCapacity(minCapacity);
     }
 
+    // ##Q why increase modCount even when there is no invocation of grow()
     private void ensureExplicitCapacity(int minCapacity) {
         modCount++;
 
+        // ##Note the caller may pass overflowed value
         // overflow-conscious code
         if (minCapacity - elementData.length > 0)
             grow(minCapacity);
@@ -240,6 +244,7 @@ public class ArrayList<E> extends AbstractList<E>
         int newCapacity = oldCapacity + (oldCapacity >> 1);
         if (newCapacity - minCapacity < 0)
             newCapacity = minCapacity;
+        //##Note some overflowed number will not enter hugeCapacity()
         if (newCapacity - MAX_ARRAY_SIZE > 0)
             newCapacity = hugeCapacity(minCapacity);
         // minCapacity is usually close to size, so this is a win:
@@ -249,6 +254,7 @@ public class ArrayList<E> extends AbstractList<E>
     private static int hugeCapacity(int minCapacity) {
         if (minCapacity < 0) // overflow
             throw new OutOfMemoryError();
+        //##Note try to use Integer.MAX_VALUE as a last try
         return (minCapacity > MAX_ARRAY_SIZE) ?
             Integer.MAX_VALUE :
             MAX_ARRAY_SIZE;
@@ -333,6 +339,7 @@ public class ArrayList<E> extends AbstractList<E>
      */
     public Object clone() {
         try {
+            //##Q why use ArrayList<?> here?
             ArrayList<?> v = (ArrayList<?>) super.clone();
             v.elementData = Arrays.copyOf(elementData, size);
             v.modCount = 0;
@@ -538,6 +545,7 @@ public class ArrayList<E> extends AbstractList<E>
     public void clear() {
         modCount++;
 
+        //##Note no system level API to empty array as C/C++
         // clear to let GC do its work
         for (int i = 0; i < size; i++)
             elementData[i] = null;
@@ -696,6 +704,8 @@ public class ArrayList<E> extends AbstractList<E>
         return batchRemove(c, true);
     }
 
+    //##N interview material
+    //    the performance highly depends on the impl of Collection#contains
     private boolean batchRemove(Collection<?> c, boolean complement) {
         final Object[] elementData = this.elementData;
         int r = 0, w = 0;
@@ -763,6 +773,7 @@ public class ArrayList<E> extends AbstractList<E>
         // Read in size, and any hidden stuff
         s.defaultReadObject();
 
+        //##Q why ignored here
         // Read in capacity
         s.readInt(); // ignored
 
@@ -1227,6 +1238,7 @@ public class ArrayList<E> extends AbstractList<E>
     public void forEach(Consumer<? super E> action) {
         Objects.requireNonNull(action);
         final int expectedModCount = modCount;
+        //##Q question Isn't E erased?
         @SuppressWarnings("unchecked")
         final E[] elementData = (E[]) this.elementData;
         final int size = this.size;
@@ -1378,6 +1390,7 @@ public class ArrayList<E> extends AbstractList<E>
     public boolean removeIf(Predicate<? super E> filter) {
         Objects.requireNonNull(filter);
         // figure out which elements are to be removed
+        // ##Note
         // any exception thrown from the filter predicate at this stage
         // will leave the collection unmodified
         int removeCount = 0;

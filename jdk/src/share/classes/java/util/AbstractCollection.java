@@ -173,6 +173,7 @@ public abstract class AbstractCollection<E> implements Collection<E> {
     @SuppressWarnings("unchecked")
     public <T> T[] toArray(T[] a) {
         // Estimate size of array; be prepared to see more or fewer elements
+        // ##Note since the collection could be concurrently modified
         int size = size();
         T[] r = a.length >= size ? a :
                   (T[])java.lang.reflect.Array
@@ -186,6 +187,7 @@ public abstract class AbstractCollection<E> implements Collection<E> {
                 } else if (a.length < i) {
                     return Arrays.copyOf(r, i);
                 } else {
+                    // ##Note if the capacity of `a` is enough
                     System.arraycopy(r, 0, a, 0, i);
                     if (a.length > i) {
                         a[i] = null;
@@ -207,6 +209,10 @@ public abstract class AbstractCollection<E> implements Collection<E> {
      */
     private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
 
+    /* ##Q how finishToArray handle the overflow of int?
+     * ##A Thanks to the way cap grows, even if newCap overflow,
+     *  it will stay in a range that make hugeCapacity meaningful
+     */
     /**
      * Reallocates the array being used within toArray when the iterator
      * returned more elements than expected, and finishes filling it from
@@ -223,6 +229,9 @@ public abstract class AbstractCollection<E> implements Collection<E> {
         while (it.hasNext()) {
             int cap = r.length;
             if (i == cap) {
+                // ##Q why is overflow-conscious
+                // ##A when cap expanding is overflow, newCap is negative
+                //  while newCap - MAX_ARRAY_SIZE is positive
                 int newCap = cap + (cap >> 1) + 1;
                 // overflow-conscious code
                 if (newCap - MAX_ARRAY_SIZE > 0)
@@ -235,6 +244,9 @@ public abstract class AbstractCollection<E> implements Collection<E> {
         return (i == r.length) ? r : Arrays.copyOf(r, i);
     }
 
+    /* ##Q why return size that is larger than MAX_ARRAY_SIZE
+     * ##A Some VM may support the array of Integer.MAX_VALUE size
+     */
     private static int hugeCapacity(int minCapacity) {
         if (minCapacity < 0) // overflow
             throw new OutOfMemoryError

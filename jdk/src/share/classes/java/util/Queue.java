@@ -109,6 +109,7 @@ package java.util;
  * defined in the {@link java.util.concurrent.BlockingQueue} interface, which
  * extends this interface.
  *
+ * ##Note `null` has specival meaning in Queue
  * <p>{@code Queue} implementations generally do not allow insertion
  * of {@code null} elements, although some implementations, such as
  * {@link LinkedList}, do not prohibit insertion of {@code null}.
@@ -117,6 +118,7 @@ package java.util;
  * used as a special return value by the {@code poll} method to
  * indicate that the queue contains no elements.
  *
+ * ##Note
  * <p>{@code Queue} implementations generally do not define
  * element-based versions of methods {@code equals} and
  * {@code hashCode} but instead inherit the identity based versions

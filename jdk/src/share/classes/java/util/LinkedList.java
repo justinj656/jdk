@@ -36,6 +36,7 @@ import java.util.function.Consumer;
  * list.  Operations that index into the list will traverse the list from
  * the beginning or the end, whichever is closer to the specified index.
  *
+ * ##Note
  * <p><strong>Note that this implementation is not synchronized.</strong>
  * If multiple threads access a linked list concurrently, and at least
  * one of the threads modifies the list structurally, it <i>must</i> be
@@ -153,6 +154,7 @@ public class LinkedList<E>
      * Inserts element e before non-null Node succ.
      */
     void linkBefore(E e, Node<E> succ) {
+        // ##Note a good example to use assert in dev
         // assert succ != null;
         final Node<E> pred = succ.prev;
         final Node<E> newNode = new Node<>(pred, e, succ);
@@ -173,6 +175,7 @@ public class LinkedList<E>
         final E element = f.item;
         final Node<E> next = f.next;
         f.item = null;
+        // ##Note how this help GC?
         f.next = null; // help GC
         first = next;
         if (next == null)
@@ -209,6 +212,7 @@ public class LinkedList<E>
     E unlink(Node<E> x) {
         // assert x != null;
         final E element = x.item;
+        //##Note another way that don't use local var next or prev
         final Node<E> next = x.next;
         final Node<E> prev = x.prev;
 
@@ -265,6 +269,10 @@ public class LinkedList<E>
      * @throws NoSuchElementException if this list is empty
      */
     public E removeFirst() {
+        /*##Note what is purpose of copy of first
+           1. make f thread local variable
+           2. a little performance gain by making the addressing quicker
+        */
         final Node<E> f = first;
         if (f == null)
             throw new NoSuchElementException();
@@ -405,6 +413,7 @@ public class LinkedList<E>
     public boolean addAll(int index, Collection<? extends E> c) {
         checkPositionIndex(index);
 
+        //##Q why use toArray() instead of iterator
         Object[] a = c.toArray();
         int numNew = a.length;
         if (numNew == 0)
@@ -422,6 +431,7 @@ public class LinkedList<E>
         for (Object o : a) {
             @SuppressWarnings("unchecked") E e = (E) o;
             Node<E> newNode = new Node<>(pred, e, null);
+            //##Note no need to judge `pred` every time
             if (pred == null)
                 first = newNode;
             else
@@ -924,6 +934,7 @@ public class LinkedList<E>
 
             Node<E> lastNext = lastReturned.next;
             unlink(lastReturned);
+            // ##Note if remove() is invoked after previous()
             if (next == lastReturned)
                 next = lastNext;
             else
@@ -1098,6 +1109,7 @@ public class LinkedList<E>
             a = (T[])java.lang.reflect.Array.newInstance(
                                 a.getClass().getComponentType(), size);
         int i = 0;
+        //##Q why copy the a
         Object[] result = a;
         for (Node<E> x = first; x != null; x = x.next)
             result[i++] = x.item;
@@ -1119,6 +1131,7 @@ public class LinkedList<E>
      *             elements (each an Object) in the proper order.
      */
     private void writeObject(java.io.ObjectOutputStream s)
+        //##Note doesn't check modCount as ArrayList
         throws java.io.IOException {
         // Write out any hidden serialization magic
         s.defaultWriteObject();
@@ -1203,6 +1216,7 @@ public class LinkedList<E>
 
         public long estimateSize() { return (long) getEst(); }
 
+        //##TODO: understand further
         public Spliterator<E> trySplit() {
             Node<E> p;
             int s = getEst();
@@ -1226,6 +1240,7 @@ public class LinkedList<E>
         public void forEachRemaining(Consumer<? super E> action) {
             Node<E> p; int n;
             if (action == null) throw new NullPointerException();
+            //##Q why count n here?
             if ((n = getEst()) > 0 && (p = current) != null) {
                 current = null;
                 est = 0;

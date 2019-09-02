@@ -69,6 +69,7 @@ import java.util.function.UnaryOperator;
  * The <tt>List</tt> interface provides two methods to efficiently insert and
  * remove multiple elements at an arbitrary point in the list.<p>
  *
+ * ##note
  * Note: While it is permissible for lists to contain themselves as elements,
  * extreme caution is advised: the <tt>equals</tt> and <tt>hashCode</tt>
  * methods are no longer well defined on such a list.
@@ -108,10 +109,26 @@ import java.util.function.UnaryOperator;
  * @since 1.2
  */
 
+/*##note: the proper order for list is from first to last element
+ * New interfaces for List:
+ *  1. replaceAll(UnaryOperator) since 1.8
+ *  2. sort(Comparator) since 1.8
+ *  3. get(int)
+ *  4. set(int, E)
+ *  5. add(int, E)
+ *  6. remove(int)
+ *  7. indexOf(Object) why use Object
+ *  8. lastIndexOf(Object) why use Object
+ *  9. listIterator()
+ * 10. listIterator(int)
+ * 11. subList(int, int)
+ * 12. spliterator
+ */
 public interface List<E> extends Collection<E> {
     // Query Operations
 
     /**
+     * ##Note
      * Returns the number of elements in this list.  If this list contains
      * more than <tt>Integer.MAX_VALUE</tt> elements, returns
      * <tt>Integer.MAX_VALUE</tt>.
@@ -214,6 +231,7 @@ public interface List<E> extends Collection<E> {
     // Modification Operations
 
     /**
+     * ##note `add` means `append` for list
      * Appends the specified element to the end of this list (optional
      * operation).
      *
@@ -238,6 +256,7 @@ public interface List<E> extends Collection<E> {
     boolean add(E e);
 
     /**
+     * ##remove the first element in sequence
      * Removes the first occurrence of the specified element from this list,
      * if it is present (optional operation).  If this list does not contain
      * the element, it is unchanged.  More formally, removes the element with
@@ -284,6 +303,7 @@ public interface List<E> extends Collection<E> {
     boolean containsAll(Collection<?> c);
 
     /**
+     * ##note the order of appending is impl-dep
      * Appends all of the elements in the specified collection to the end of
      * this list, in the order that they are returned by the specified
      * collection's iterator (optional operation).  The behavior of this
@@ -451,6 +471,7 @@ public interface List<E> extends Collection<E> {
     // Comparison and hashing
 
     /**
+     * ##note same elements in the same order
      * Compares the specified object with this list for equality.  Returns
      * <tt>true</tt> if and only if the specified object is also a list, both
      * lists have the same size, and all corresponding pairs of elements in
@@ -534,6 +555,7 @@ public interface List<E> extends Collection<E> {
      *         this list does not permit null elements
      * @throws IllegalArgumentException if some property of the specified
      *         element prevents it from being added to this list
+     * ##Note the range is [0, size]
      * @throws IndexOutOfBoundsException if the index is out of range
      *         (<tt>index &lt; 0 || index &gt; size()</tt>)
      */
@@ -608,6 +630,7 @@ public interface List<E> extends Collection<E> {
     ListIterator<E> listIterator();
 
     /**
+     * ##note fromIndex is inclusive
      * Returns a list iterator over the elements in this list (in proper
      * sequence), starting at the specified position in the list.
      * The specified index indicates the first element that would be
@@ -635,6 +658,7 @@ public interface List<E> extends Collection<E> {
      * The returned list supports all of the optional list operations supported
      * by this list.<p>
      *
+     * ##note
      * This method eliminates the need for explicit range operations (of
      * the sort that commonly exist for arrays).  Any operation that expects
      * a list can be used as a range operation by passing a subList view
@@ -647,6 +671,7 @@ public interface List<E> extends Collection<E> {
      * <tt>lastIndexOf</tt>, and all of the algorithms in the
      * <tt>Collections</tt> class can be applied to a subList.<p>
      *
+     * ##note
      * The semantics of the list returned by this method become undefined if
      * the backing list (i.e., this list) is <i>structurally modified</i> in
      * any way other than via the returned list.  (Structural modifications are

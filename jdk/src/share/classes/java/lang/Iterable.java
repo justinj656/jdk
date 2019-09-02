@@ -50,6 +50,10 @@ public interface Iterable<T> {
      */
     Iterator<T> iterator();
 
+    /* ##note
+     *  1. implement-dependent ordering
+     *  2. stop until consume all or an exception threw
+     */
     /**
      * Performs the given action for each element of the {@code Iterable}
      * until all elements have been processed or the action throws an
@@ -76,6 +80,7 @@ public interface Iterable<T> {
         }
     }
 
+    /* ##skip */
     /**
      * Creates a {@link Spliterator} over the elements described by this
      * {@code Iterable}.

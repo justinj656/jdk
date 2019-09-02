@@ -54,6 +54,7 @@ import java.util.stream.StreamSupport;
  * constructors) but all of the general-purpose <tt>Collection</tt>
  * implementations in the Java platform libraries comply.
  *
+ * ##note optional operation
  * <p>The "destructive" methods contained in this interface, that is, the
  * methods that modify the collection on which they operate, are specified to
  * throw <tt>UnsupportedOperationException</tt> if this collection does not
@@ -63,6 +64,10 @@ import java.util.stream.StreamSupport;
  * the {@link #addAll(Collection)} method on an unmodifiable collection may,
  * but is not required to, throw the exception if the collection to be added
  * is empty.
+ *
+ *##note
+ * one example of `ClassCastException` is that TreeSet requires that the
+ * element type implements comparable
  *
  * <p><a name="optional-restrictions">
  * Some collection implementations have restrictions on the elements that
@@ -144,6 +149,9 @@ import java.util.stream.StreamSupport;
 public interface Collection<E> extends Iterable<E> {
     // Query Operations
 
+    /* ##note returns `Integer.MAX_VALUE` if a collection contains more than it
+     * ##question how can a collection contains more than `Integer.MAX_VALUE`
+     */
     /**
      * Returns the number of elements in this collection.  If this collection
      * contains more than <tt>Integer.MAX_VALUE</tt> elements, returns
@@ -160,6 +168,7 @@ public interface Collection<E> extends Iterable<E> {
      */
     boolean isEmpty();
 
+    /* @@note take care of `contains(null)` */
     /**
      * Returns <tt>true</tt> if this collection contains the specified element.
      * More formally, returns <tt>true</tt> if and only if this collection
@@ -189,11 +198,13 @@ public interface Collection<E> extends Iterable<E> {
     Iterator<E> iterator();
 
     /**
+     * ##note order guarantee
      * Returns an array containing all of the elements in this collection.
      * If this collection makes any guarantees as to what order its elements
      * are returned by its iterator, this method must return the elements in
      * the same order.
      *
+     * ##note safe guarantee
      * <p>The returned array will be "safe" in that no references to it are
      * maintained by this collection.  (In other words, this method must
      * allocate a new array even if this collection is backed by an array).
@@ -213,6 +224,7 @@ public interface Collection<E> extends Iterable<E> {
      * Otherwise, a new array is allocated with the runtime type of the
      * specified array and the size of this collection.
      *
+     * ##note a null element fills immediately following the last element
      * <p>If this collection fits in the specified array with room to spare
      * (i.e., the array has more elements than this collection), the element
      * in the array immediately following the end of the collection is set to
@@ -220,6 +232,7 @@ public interface Collection<E> extends Iterable<E> {
      * collection <i>only</i> if the caller knows that this collection does
      * not contain any <tt>null</tt> elements.)
      *
+     * ##note same order as the that returns from the iterator
      * <p>If this collection makes any guarantees as to what order its elements
      * are returned by its iterator, this method must return the elements in
      * the same order.
@@ -254,6 +267,7 @@ public interface Collection<E> extends Iterable<E> {
     // Modification Operations
 
     /**
+     * ##Q in which case could `Collection#add` return false
      * Ensures that this collection contains the specified element (optional
      * operation).  Returns <tt>true</tt> if this collection changed as a
      * result of the call.  (Returns <tt>false</tt> if this collection does
@@ -266,6 +280,7 @@ public interface Collection<E> extends Iterable<E> {
      * Collection classes should clearly specify in their documentation any
      * restrictions on what elements may be added.<p>
      *
+     * ##Q when should return false, when should throw an exception
      * If a collection refuses to add a particular element for any reason
      * other than that it already contains the element, it <i>must</i> throw
      * an exception (rather than returning <tt>false</tt>).  This preserves
@@ -289,6 +304,7 @@ public interface Collection<E> extends Iterable<E> {
     boolean add(E e);
 
     /**
+     * ##Q when there are multiple identical elements, will remove them all?
      * Removes a single instance of the specified element from this
      * collection, if it is present (optional operation).  More formally,
      * removes an element <tt>e</tt> such that
@@ -334,6 +350,8 @@ public interface Collection<E> extends Iterable<E> {
     boolean containsAll(Collection<?> c);
 
     /**
+     * ##note undefined behaviour when collection is modified while the
+     *  operation is in progress
      * Adds all of the elements in the specified collection to this collection
      * (optional operation).  The behavior of this operation is undefined if
      * the specified collection is modified while the operation is in progress.
@@ -360,6 +378,8 @@ public interface Collection<E> extends Iterable<E> {
     boolean addAll(Collection<? extends E> c);
 
     /**
+     * ##Q remove all?
+     * ##Trial write a test
      * Removes all of this collection's elements that are also contained in the
      * specified collection (optional operation).  After this call returns,
      * this collection will contain no elements in common with the specified
@@ -507,7 +527,7 @@ public interface Collection<E> extends Iterable<E> {
      */
     int hashCode();
 
-    /**
+    /** ##skip spliterator, stream, parallelStream
      * Creates a {@link Spliterator} over the elements in this collection.
      *
      * Implementations should document characteristic values reported by the

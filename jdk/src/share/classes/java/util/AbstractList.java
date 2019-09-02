@@ -351,6 +351,7 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
             return cursor != size();
         }
 
+        /* ##Q why check for co-modification twice */
         public E next() {
             checkForComodification();
             try {
@@ -366,12 +367,14 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
         }
 
         public void remove() {
+            //##Note could not invoke remove consecutively
             if (lastRet < 0)
                 throw new IllegalStateException();
             checkForComodification();
 
             try {
                 AbstractList.this.remove(lastRet);
+                //##Q when lastRet >= cursor ??
                 if (lastRet < cursor)
                     cursor--;
                 lastRet = -1;

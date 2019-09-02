@@ -168,6 +168,7 @@ package java.util;
  * <p>Unlike the {@link List} interface, this interface does not
  * provide support for indexed access to elements.
  *
+ * ##Note
  * <p>While {@code Deque} implementations are not strictly required
  * to prohibit the insertion of null elements, they are strongly
  * encouraged to do so.  Users of any {@code Deque} implementations
@@ -176,6 +177,7 @@ package java.util;
  * {@code null} is used as a special return value by various methods
  * to indicated that the deque is empty.
  *
+ * ##Note
  * <p>{@code Deque} implementations generally do not define
  * element-based versions of the {@code equals} and {@code hashCode}
  * methods, but instead inherit the identity-based versions from class

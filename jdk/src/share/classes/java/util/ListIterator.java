@@ -26,6 +26,7 @@
 package java.util;
 
 /**
+ * ##note a list iterator has no current element
  * An iterator for lists that allows the programmer
  * to traverse the list in either direction, modify
  * the list during iteration, and obtain the iterator's
@@ -34,12 +35,15 @@ package java.util;
  * lies between the element that would be returned by a call
  * to {@code previous()} and the element that would be
  * returned by a call to {@code next()}.
+ * ##Note
  * An iterator for a list of length {@code n} has {@code n+1} possible
  * cursor positions, as illustrated by the carets ({@code ^}) below:
  * <PRE>
  *                      Element(0)   Element(1)   Element(2)   ... Element(n-1)
  * cursor positions:  ^            ^            ^            ^                  ^
  * </PRE>
+ *
+ * ##note
  * Note that the {@link #remove} and {@link #set(Object)} methods are
  * <i>not</i> defined in terms of the cursor position;  they are defined to
  * operate on the last element returned by a call to {@link #next} or
@@ -56,6 +60,17 @@ package java.util;
  * @see Enumeration
  * @see List#listIterator()
  * @since   1.2
+ */
+
+/*##note
+ * New interfaces:
+ *  1. hasPrevious
+ *  2. previous
+ *  3. nextIndex
+ *  4. previousIndex
+ *  5. remove
+ *  6. set
+ *  7. add
  */
 public interface ListIterator<E> extends Iterator<E> {
     // Query Operations
@@ -134,6 +149,7 @@ public interface ListIterator<E> extends Iterator<E> {
     // Modification Operations
 
     /**
+     * ##todo: write test
      * Removes from the list the last element that was returned by {@link
      * #next} or {@link #previous} (optional operation).  This call can
      * only be made once per call to {@code next} or {@code previous}.
@@ -150,6 +166,7 @@ public interface ListIterator<E> extends Iterator<E> {
     void remove();
 
     /**
+     * ##todo: understand the limitation
      * Replaces the last element returned by {@link #next} or
      * {@link #previous} with the specified element (optional operation).
      * This call can be made only if neither {@link #remove} nor {@link

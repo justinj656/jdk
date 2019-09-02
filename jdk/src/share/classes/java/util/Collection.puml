@@ -1,0 +1,61 @@
+@startuml
+!define Background   #2d2d2d
+!define CurrentLine  #393939
+!define Selection    #515151
+!define Foregound    #cccccc
+!define Comment      #999999
+!define Red          #f2777a
+!define Orange       #f99157
+!define Yellow       #ffcc66
+!define Green        #99cc99
+!define Aqua         #66cccc
+!define Blue         #6699cc
+!define Purple       #cc99cc
+
+skinparam Shadowing false
+skinparam backgroundColor transparent
+skinparam ArrowFontColor white
+
+interface Iterator
+interface Iterable
+interface Collection
+interface List
+interface ListIterator
+interface Spliterator
+interface Stream
+interface Queue
+interface Deque
+
+abstract class AbstractList
+abstract class AbstractCollection
+abstract class AbstractSequentialList
+
+class ArrayList
+class LinkedList
+
+'interface extend
+Iterable <|-- Collection
+Collection <|-- List
+Iterator <|-- ListIterator
+Collection <|-- Queue
+Queue <|-- Deque
+
+'implement
+Collection <|-- AbstractCollection
+List <|-- AbstractList
+Deque <|-- LinkedList
+
+'impl extend
+AbstractCollection <|- AbstractList
+AbstractList <|-- AbstractSequentialList
+AbstractSequentialList <|-- LinkedList
+AbstractList <|-- ArrayList
+
+
+'associate
+Iterable - Iterator : iterator()
+Collection -- Spliterator : spliterator()
+Collection - Stream : stream()\nparallelStream()
+ListIterator -- List : listIterator()\nlistIterator(int)
+
+@enduml
