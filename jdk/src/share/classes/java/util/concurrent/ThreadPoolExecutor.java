@@ -154,7 +154,7 @@ import java.util.*;
  *
  * There are three general strategies for queuing:
  * <ol>
- *
+ * JJ-TODO study this strategy
  * <li> <em> Direct handoffs.</em> A good default choice for a work
  * queue is a {@link SynchronousQueue} that hands off tasks to threads
  * without otherwise holding them. Here, an attempt to queue a task
@@ -651,6 +651,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
                 try {
                     t.interrupt();
                 } catch (SecurityException ignore) {
+                    // JJ why ignore SecurityException
                 }
             }
         }

@@ -45,6 +45,7 @@ import java.io.Serializable;
  * specific guarantees as to their order; others, like the <tt>HashMap</tt>
  * class, do not.
  *
+ * ##Note
  * <p>Note: great care must be exercised if mutable objects are used as map
  * keys.  The behavior of a map is not specified if the value of an object is
  * changed in a manner that affects <tt>equals</tt> comparisons while the
@@ -193,6 +194,7 @@ public interface Map<K,V> {
      * key.equals(k))}, then this method returns {@code v}; otherwise
      * it returns {@code null}.  (There can be at most one such mapping.)
      *
+     * ##Note
      * <p>If this map permits null values, then a return value of
      * {@code null} does not <i>necessarily</i> indicate that the map
      * contains no mapping for the key; it's also possible that the map
@@ -317,6 +319,7 @@ public interface Map<K,V> {
      * which removes the corresponding mapping from the map, via the
      * <tt>Iterator.remove</tt>, <tt>Set.remove</tt>,
      * <tt>removeAll</tt>, <tt>retainAll</tt>, and <tt>clear</tt>
+     * ##Note
      * operations.  It does not support the <tt>add</tt> or <tt>addAll</tt>
      * operations.
      *
@@ -347,11 +350,13 @@ public interface Map<K,V> {
      * reflected in the set, and vice-versa.  If the map is modified
      * while an iteration over the set is in progress (except through
      * the iterator's own <tt>remove</tt> operation, or through the
+     * ##Note setValue
      * <tt>setValue</tt> operation on a map entry returned by the
      * iterator) the results of the iteration are undefined.  The set
      * supports element removal, which removes the corresponding
      * mapping from the map, via the <tt>Iterator.remove</tt>,
      * <tt>Set.remove</tt>, <tt>removeAll</tt>, <tt>retainAll</tt> and
+     * ##Note
      * <tt>clear</tt> operations.  It does not support the
      * <tt>add</tt> or <tt>addAll</tt> operations.
      *
@@ -467,6 +472,8 @@ public interface Map<K,V> {
          * @see Comparable
          * @since 1.8
          */
+        //##Question what does & Serializable
+        //  https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.16
         public static <K extends Comparable<? super K>, V> Comparator<Map.Entry<K,V>> comparingByKey() {
             return (Comparator<Map.Entry<K, V>> & Serializable)
                 (c1, c2) -> c1.getKey().compareTo(c2.getKey());
@@ -545,6 +552,7 @@ public interface Map<K,V> {
     boolean equals(Object o);
 
     /**
+     * ##Note: sum of the hash codes of entries
      * Returns the hash code value for this map.  The hash code of a map is
      * defined to be the sum of the hash codes of each entry in the map's
      * <tt>entrySet()</tt> view.  This ensures that <tt>m1.equals(m2)</tt>
@@ -595,6 +603,7 @@ public interface Map<K,V> {
      * have been processed or the action throws an exception.   Unless
      * otherwise specified by the implementing class, actions are performed in
      * the order of entry set iteration (if an iteration order is specified.)
+     * ##Note
      * Exceptions thrown by the action are relayed to the caller.
      *
      * @implSpec
@@ -634,6 +643,7 @@ public interface Map<K,V> {
     /**
      * Replaces each entry's value with the result of invoking the given
      * function on that entry until all entries have been processed or the
+     * ##Note
      * function throws an exception.  Exceptions thrown by the function are
      * relayed to the caller.
      *
@@ -695,7 +705,7 @@ public interface Map<K,V> {
         }
     }
 
-    /**
+    /** ##Note or is mapped to {@code null}
      * If the specified key is not already associated with a value (or is mapped
      * to {@code null}) associates it with the given value and returns
      * {@code null}, else returns the current value.
@@ -1027,6 +1037,7 @@ public interface Map<K,V> {
         }
     }
 
+    //##Note what is returned by compute, computeIsAbsent, computeIsPresent
     /**
      * Attempts to compute a mapping for the specified key and its current
      * mapped value (or {@code null} if there is no current mapping). For

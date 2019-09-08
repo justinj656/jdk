@@ -156,6 +156,7 @@ public abstract class AbstractExecutorService implements ExecutorService {
         // plus the exception mechanics account for messiness of main
         // loop.
 
+        // JJ-review how to cover all the scenario
         try {
             // Record exceptions so that if we fail to obtain any
             // result, we can throw the last exception we got.
@@ -250,8 +251,10 @@ public abstract class AbstractExecutorService implements ExecutorService {
             done = true;
             return futures;
         } finally {
+            // JJ may be some runtime errors
             if (!done)
                 for (int i = 0, size = futures.size(); i < size; i++)
+                    // JJ if the future is completed, cannot be cancelled
                     futures.get(i).cancel(true);
         }
     }

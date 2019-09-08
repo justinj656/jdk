@@ -73,6 +73,11 @@ public class FutureTask<V> implements RunnableFuture<V> {
      * AtomicXFieldUpdaters and instead directly use Unsafe intrinsics.
      */
 
+    /* JJ-ref
+     * 1. Treiber stack [https://en.wipipedia.org/wiki/Treiber_Stack]
+     * 2. ABA problem [https://en.wikipedia.org/wiki/ABA problem]
+     */
+
     /**
      * The run state of this task, initially NEW.  The run state
      * transitions to a terminal state only in methods set,

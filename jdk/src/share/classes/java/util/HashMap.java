@@ -44,6 +44,7 @@ import java.util.function.Function;
  * the order of the map; in particular, it does not guarantee that the order
  * will remain constant over time.
  *
+ * ##Note the performance of iteration
  * <p>This implementation provides constant-time performance for the basic
  * operations (<tt>get</tt> and <tt>put</tt>), assuming the hash function
  * disperses the elements properly among the buckets.  Iteration over
@@ -64,6 +65,7 @@ import java.util.function.Function;
  * structures are rebuilt) so that the hash table has approximately twice the
  * number of buckets.
  *
+ * ##Note trade-off of load factor
  * <p>As a general rule, the default load factor (.75) offers a good
  * tradeoff between time and space costs.  Higher values decrease the
  * space overhead but increase the lookup cost (reflected in most of
@@ -75,6 +77,8 @@ import java.util.function.Function;
  * maximum number of entries divided by the load factor, no rehash
  * operations will ever occur.
  *
+ * ##Note better large initial capacity for large map then subsequent rehash
+ * ##Note Comparable may be treated differently
  * <p>If many mappings are to be stored in a <tt>HashMap</tt>
  * instance, creating it with a sufficiently large capacity will allow
  * the mappings to be stored more efficiently than letting it perform
@@ -108,6 +112,7 @@ import java.util.function.Function;
  * arbitrary, non-deterministic behavior at an undetermined time in the
  * future.
  *
+ * ##Fail-fast behavior is a best-effort mechanism
  * <p>Note that the fail-fast behavior of an iterator cannot be guaranteed
  * as it is, generally speaking, impossible to make any hard guarantees in the
  * presence of unsynchronized concurrent modification.  Fail-fast iterators
@@ -139,7 +144,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
 
     private static final long serialVersionUID = 362498820763181265L;
 
-    /*
+    /* ##Puzzle
      * Implementation notes.
      *
      * This map usually acts as a binned (bucketed) hash table, but
@@ -372,6 +377,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
     }
 
     /**
+     * ##TODO: understand
      * Returns a power of two size for the given target capacity.
      */
     static final int tableSizeFor(int cap) {

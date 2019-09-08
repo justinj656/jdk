@@ -25,10 +25,14 @@ interface Spliterator
 interface Stream
 interface Queue
 interface Deque
+interface Map
+interface Set
 
 abstract class AbstractList
 abstract class AbstractCollection
 abstract class AbstractSequentialList
+abstract class AbstractMap
+abstract class AbstractSet
 
 class ArrayList
 class LinkedList
@@ -39,23 +43,29 @@ Collection <|-- List
 Iterator <|-- ListIterator
 Collection <|-- Queue
 Queue <|-- Deque
+Collection <|-- Set
 
 'implement
 Collection <|-- AbstractCollection
 List <|-- AbstractList
 Deque <|-- LinkedList
+Map <|-- AbstractMap
+Set <|-- AbstractSet
 
 'impl extend
 AbstractCollection <|- AbstractList
 AbstractList <|-- AbstractSequentialList
 AbstractSequentialList <|-- LinkedList
 AbstractList <|-- ArrayList
-
+AbstractSet <|-- HashSet
+AbstractMap <|-- HashMap
 
 'associate
 Iterable - Iterator : iterator()
 Collection -- Spliterator : spliterator()
 Collection - Stream : stream()\nparallelStream()
 ListIterator -- List : listIterator()\nlistIterator(int)
+Collection -- Map : values()
+Set -- Map : keySet()\nentrySet()
 
 @enduml

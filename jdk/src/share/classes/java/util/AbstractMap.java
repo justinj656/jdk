@@ -447,6 +447,7 @@ public abstract class AbstractMap<K,V> implements Map<K,V> {
         if (m.size() != size())
             return false;
 
+        //##Qustion Why don't use Set#equals here?
         try {
             Iterator<Entry<K,V>> i = entrySet().iterator();
             while (i.hasNext()) {
